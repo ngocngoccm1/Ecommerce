@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var tableName = entityType.GetTableName();
