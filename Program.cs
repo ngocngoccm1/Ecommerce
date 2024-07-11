@@ -1,12 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
-
 using App.Models;
-using Microsoft.Extensions.DependencyInjection;
-
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<TodoContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TodoContext") ?? throw new InvalidOperationException("Connection string 'TodoContext' not found.")));
 
 builder.Services.AddControllers();
 // builder.Services.AddDbContext<TodoContext>(opt =>
@@ -32,5 +26,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();
