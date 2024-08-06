@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using App.Models;
-public class AppDbContext : DbContext
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+// using Microsoft.EntityFrameworkCore;
+public class AppDbContext : IdentityDbContext<User>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -21,7 +24,7 @@ public class AppDbContext : DbContext
 
         // Define any additional model configurations here
     }
-    public DbSet<User> Users { get; set; }
+    // public DbSet<User> Users { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }

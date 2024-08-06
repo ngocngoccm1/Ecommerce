@@ -27,4 +27,21 @@ public class Product
     public ICollection<CartItem> CartItems { get; set; }
     public ICollection<Review> Reviews { get; set; }
 }
+public class ProductDTO
+{
+    [Key]
+    public int ProductId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    public string Description { get; set; }
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal Price { get; set; }
+    public int Stock { get; set; }
+
+    [ForeignKey("Category")]
+    public int CategoryId { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
 

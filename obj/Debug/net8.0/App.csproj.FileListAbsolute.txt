@@ -252,3 +252,10 @@ D:\APIs\App\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\APIs\App\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\APIs\App\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 D:\APIs\App\obj\Debug\net8.0\App.sourcelink.json
+D:\APIs\App\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
+D:\APIs\App\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
