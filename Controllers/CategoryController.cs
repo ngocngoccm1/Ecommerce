@@ -39,7 +39,7 @@ namespace App.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categoryRepo.GetByIdAsync(id);
 
             if (category == null)
             {
@@ -52,32 +52,12 @@ namespace App.Controllers
         // PUT: api/Category/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> Create(int id, Category category)
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCategoryRequest updateDto)
         {
-            if (id != category.CategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var categoriesModel = await _categoryRepo.UpdateAsync(id, updateDto);
+            if (categoriesModel == null) return NotFound();
+            return Ok(categoriesModel.ToCategoriDto());
         }
 
         // POST: api/Category
@@ -86,8 +66,7 @@ namespace App.Controllers
         public async Task<ActionResult> Create([FromBody] CreateCategoryRequest categoryDTO)
         {
             var categoryModel = categoryDTO.ToFromCreateDOT();
-            _context.Categories.Add(categoryModel);
-            await _context.SaveChangesAsync();
+            await _categoryRepo.CreateAsync(categoryModel);
 
             return CreatedAtAction(nameof(GetCategory), new { id = categoryModel.CategoryId }, categoryModel.ToCategoriDto());
         }
@@ -96,15 +75,11 @@ namespace App.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _categoryRepo.DeledeAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
