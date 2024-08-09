@@ -37,9 +37,7 @@ namespace App.Migrations
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -381,15 +379,9 @@ namespace App.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -397,14 +389,6 @@ namespace App.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -435,16 +419,9 @@ namespace App.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -462,8 +439,8 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Cart", b =>
                 {
                     b.HasOne("User", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("App.Models.Cart", "UserId");
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -490,7 +467,7 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Order", b =>
                 {
                     b.HasOne("User", "User")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
@@ -546,7 +523,7 @@ namespace App.Migrations
                         .IsRequired();
 
                     b.HasOne("User", "User")
-                        .WithMany("Reviews")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Product");
@@ -627,15 +604,6 @@ namespace App.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderItems");
-
-                    b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("User", b =>
-                {
-                    b.Navigation("Cart");
-
-                    b.Navigation("Orders");
 
                     b.Navigation("Reviews");
                 });
