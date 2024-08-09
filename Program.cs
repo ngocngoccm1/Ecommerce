@@ -1,11 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using App.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Razor.Language;
 using App.Interface;
-using App.CateroryRepository;
+using App.CategoryRepository;
+using App.ProductRepository;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -51,7 +50,8 @@ builder.Services.AddAuthentication(o =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICategoryRepository, CatergoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 

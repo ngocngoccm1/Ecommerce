@@ -3,12 +3,12 @@ using App.Interface;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.CateroryRepository
+namespace App.CategoryRepository
 {
-    public class CatergoryRepository : ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly AppDbContext _context;
-        public CatergoryRepository(AppDbContext context)
+        public CategoryRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -43,6 +43,7 @@ namespace App.CateroryRepository
         {
             var existringCategory = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
             if (existringCategory == null) return null;
+
             existringCategory.Name = categoryDTO.Name;
 
             await _context.SaveChangesAsync();
