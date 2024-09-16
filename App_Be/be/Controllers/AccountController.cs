@@ -45,7 +45,7 @@ namespace App.Controllers
                 {
                     UserName = user.UserName,
                     Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = _tokenService.CreateToken(user, _userManager.GetRolesAsync(user).ToString())
                 }
             );
 
@@ -64,16 +64,16 @@ namespace App.Controllers
                 var createUser = await _userManager.CreateAsync(user, registerDto.Password);
                 if (createUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                    var role = "Admin";
+                    var roleResult = await _userManager.AddToRoleAsync(user, role);
                     if (roleResult.Succeeded)
                         return Ok(
                             new NewUserDto
                             {
                                 UserName = user.UserName,
                                 Email = user.Email,
-                                Token = _tokenService.CreateToken(user)
+                                Token = _tokenService.CreateToken(user, role)
                             }
-
                             );
                     else return StatusCode(500, roleResult.Errors);
                 }
@@ -88,7 +88,8 @@ namespace App.Controllers
 
         [HttpGet]
         [Route("/manager")]
-//[Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUser()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -96,6 +97,7 @@ namespace App.Controllers
             foreach (var user in users)
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
+
                 userwithRoles.Add(new UserDto
                 {
                     Id = user.Id,
@@ -107,6 +109,20 @@ namespace App.Controllers
 
 
             return Ok(userwithRoles);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetUserRoles()
+        {
+            if (User.IsInRole("User"))
+            {
+                return Ok("roles"); // Hoặc xử lý theo cách bạn muốn
+
+            }
+
+
+            return Ok("no"); // Hoặc xử lý theo cách bạn muốn
         }
 
     }

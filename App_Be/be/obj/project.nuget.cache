@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aqFlliQ/TQM=",
+  "dgSpecHash": "qYOKT1g6UsY=",
   "success": true,
-  "projectFilePath": "D:\\Ecommerce\\App_Be\\be\\App.csproj",
+  "projectFilePath": "D:\\App\\App_Be\\be\\App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ngoc5\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\ngoc5\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

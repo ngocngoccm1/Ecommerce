@@ -29,7 +29,7 @@ namespace App.Controllers
 
         // GET: api/Category
         [HttpGet]
-
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<Category>> GetCategories()
         {
             var categoris = await _categoryRepo.GetAllAsync();

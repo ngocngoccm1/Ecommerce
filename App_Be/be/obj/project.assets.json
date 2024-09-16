@@ -8954,11 +8954,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Ecommerce\\App_Be\\be\\App.csproj",
+      "projectUniqueName": "D:\\App\\App_Be\\be\\App.csproj",
       "projectName": "App",
-      "projectPath": "D:\\Ecommerce\\App_Be\\be\\App.csproj",
+      "projectPath": "D:\\App\\App_Be\\be\\App.csproj",
       "packagesPath": "C:\\Users\\ngoc5\\.nuget\\packages\\",
-      "outputPath": "D:\\Ecommerce\\App_Be\\be\\obj\\",
+      "outputPath": "D:\\App\\App_Be\\be\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ngoc5\\AppData\\Roaming\\NuGet\\NuGet.Config"

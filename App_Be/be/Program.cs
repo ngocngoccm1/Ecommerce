@@ -29,8 +29,9 @@ builder.Services.AddIdentity<User, IdentityRole>(o =>
     o.Password.RequireLowercase = true;
     o.Password.RequireUppercase = true;
     o.Password.RequireNonAlphanumeric = true;
-    o.Password.RequiredLength = 12;
+    o.Password.RequiredLength = 6;
 })
+.AddRoles<IdentityRole>() // Thêm hỗ trợ cho roles
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
@@ -43,7 +44,8 @@ builder.Services.AddAuthentication(o =>
     o.DefaultScheme =
     o.DefaultSignInScheme =
     o.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
+})
+.AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
     {
@@ -58,6 +60,8 @@ builder.Services.AddAuthentication(o =>
     };
 });
 
+
+builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
