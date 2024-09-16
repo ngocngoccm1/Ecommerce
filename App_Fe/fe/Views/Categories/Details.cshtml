@@ -1,0 +1,20 @@
+@model Models.CategoryModel
+
+<div class="container mt-5">
+    <h1 class="text-center">@Model.Name</h1>
+    <div class="row">
+        @if (Model.Products != null)
+        {
+
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-md-3 mb-4">
+                    <partial name="_CardProduct" model="product" />
+                </div>
+            }
+        }
+    </div>
+
+
+</div>
+</div>

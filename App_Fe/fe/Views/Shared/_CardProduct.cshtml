@@ -1,0 +1,17 @@
+@model Models.ProductModel
+
+<div class="card h-100 w-200" style="overflow: hidden;">
+    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">
+        <img class="card-img-top" src="data:image/jpeg;base64,@Model.Image" alt="@Model.Name">
+    </a>
+    <div class="card-body">
+        <h4 class="card-title">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Model.Name</a>
+        </h4>
+        <h5>@Model.Price</h5>
+        <p class="card-text">@Model.CategoryName</p>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+    </div>
+</div>

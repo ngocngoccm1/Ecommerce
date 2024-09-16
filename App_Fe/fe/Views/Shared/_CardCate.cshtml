@@ -1,0 +1,11 @@
+@model Models.CategoryModel
+
+<div class="card" style="width: 18rem; margin: 10px;">
+
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <a href="@Url.Action("Details", "Categories", new { id = Model.CategoryId })" class="btn btn-primary">Xem chi
+            tiết</a>
+
+    </div>
+</div>
