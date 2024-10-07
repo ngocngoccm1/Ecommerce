@@ -7,7 +7,6 @@ namespace App.DTO.Account
         public string Id { set; get; }
         public string Username { set; get; }
         public string Email { set; get; }
-
         public List<string> Roles { set; get; }
     }
 }

@@ -8,6 +8,7 @@ using App.ProductRepository;
 using System.Security.Cryptography.Xml;
 using App.Service;
 using Microsoft.OpenApi.Models;
+using App.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -94,9 +95,20 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 // Thêm các dịch vụ 
-
+// Category
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+// Cart
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+// Payment
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+// Order
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+// Product
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+// token
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();

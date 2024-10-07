@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\App_Fe\\fe\\fe.csproj": {}
+    "D:\\App\\App_Fe\\fe\\fe.csproj": {}
   },
   "projects": {
-    "D:\\App_Fe\\fe\\fe.csproj": {
+    "D:\\App\\App_Fe\\fe\\fe.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\App_Fe\\fe\\fe.csproj",
+        "projectUniqueName": "D:\\App\\App_Fe\\fe\\fe.csproj",
         "projectName": "fe",
-        "projectPath": "D:\\App_Fe\\fe\\fe.csproj",
+        "projectPath": "D:\\App\\App_Fe\\fe\\fe.csproj",
         "packagesPath": "C:\\Users\\ngoc5\\.nuget\\packages\\",
-        "outputPath": "D:\\App_Fe\\fe\\obj\\",
+        "outputPath": "D:\\App\\App_Fe\\fe\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ngoc5\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +43,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Blazored.SessionStorage": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "Microsoft.AspNetCore.Components.WebAssembly.Authentication": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[8.0.0, )"

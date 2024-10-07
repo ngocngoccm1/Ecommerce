@@ -16,9 +16,12 @@ namespace App.Controllers
     {
         private readonly HttpClient _httpClient;
 
-        public ProductsController()
+        public ProductsController(HttpClient httpClient)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("http://localhost:5155/");
+
+
         }
         public IActionResult Test()
         {
@@ -27,8 +30,9 @@ namespace App.Controllers
 
         public async Task<IActionResult> Index(string? name)
         {
-
-            var url = "http://localhost:5155/api/Product";
+            if (IsLogin()) { ViewBag.IsLogin = true; }
+            else { ViewBag.IsLogin = false; }
+            var url = "api/Product";
             if (!string.IsNullOrEmpty(name))
             {
                 url += $"?Name={name}";
@@ -54,6 +58,7 @@ namespace App.Controllers
         // Thêm vào ApiProductController
         public async Task<IActionResult> Create()
         {
+            ViewBag.IsLogin = true;
             var categories = await GetCategories(); // Phương thức để lấy danh sách danh mục
             ViewBag.Categories = categories.Select(c => new SelectListItem
             {
@@ -65,7 +70,9 @@ namespace App.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            string apiUrl = $"http://localhost:5155/api/Product/{id}";
+            if (IsLogin()) { ViewBag.IsLogin = true; }
+            else { ViewBag.IsLogin = false; }
+            string apiUrl = $"api/Product/{id}";
             try
             {
                 var response = await _httpClient.GetStringAsync(apiUrl);
@@ -138,7 +145,12 @@ namespace App.Controllers
         }
 
 
+        private bool IsLogin()
+        {
+            // Check if the token exists in the session
+            var token = HttpContext.Session.GetString("token");
+            return !string.IsNullOrEmpty(token); // Return true if the token is not null or empty
+        }
 
     }
 }
-

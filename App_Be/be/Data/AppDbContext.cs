@@ -13,6 +13,13 @@ public class AppDbContext : IdentityDbContext<User>
     {
         base.OnModelCreating(modelBuilder);
 
+
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.User)
+            .WithMany(u => u.Orders) // Thiết lập mối quan hệ một-nhiều
+            .HasForeignKey(o => o.UserId);
+
+
         List<IdentityRole> roles = new List<IdentityRole>
         {
             new IdentityRole
@@ -30,6 +37,7 @@ public class AppDbContext : IdentityDbContext<User>
         };
         modelBuilder.Entity<IdentityRole>().HasData(roles);
 
+
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var tableName = entityType.GetTableName();
@@ -44,8 +52,14 @@ public class AppDbContext : IdentityDbContext<User>
         // Define any additional model configurations here
     }
 
+
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<Payment> Payments { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+
 
 
 

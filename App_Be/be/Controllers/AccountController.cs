@@ -31,6 +31,7 @@ namespace App.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName);
 
@@ -40,13 +41,12 @@ namespace App.Controllers
 
             if (!result.Succeeded) return Unauthorized("Sai tên đăng nhập hoặc mật khẩu");
 
-            return Ok(
-                new NewUserDto
-                {
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Token = _tokenService.CreateToken(user, _userManager.GetRolesAsync(user).ToString())
-                }
+            return Ok(new NewUserDto
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Token = _tokenService.CreateToken(user, _userManager.GetRolesAsync(user).ToString())
+            }
             );
 
         }
@@ -64,7 +64,7 @@ namespace App.Controllers
                 var createUser = await _userManager.CreateAsync(user, registerDto.Password);
                 if (createUser.Succeeded)
                 {
-                    var role = "Admin";
+                    var role = "User";
                     var roleResult = await _userManager.AddToRoleAsync(user, role);
                     if (roleResult.Succeeded)
                         return Ok(
@@ -118,10 +118,7 @@ namespace App.Controllers
             if (User.IsInRole("User"))
             {
                 return Ok("roles"); // Hoặc xử lý theo cách bạn muốn
-
             }
-
-
             return Ok("no"); // Hoặc xử lý theo cách bạn muốn
         }
 
