@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var token = Context.Session.GetString("token");
+    var IsLogin = !string.IsNullOrEmpty(token);
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -35,18 +39,27 @@
                             <a class="nav-link" href="fita.edu.vn/lien-he">Liên hệ</a>
                         </li>
 
+
                     </ul>
                     <ul class="navbar-nav ms-auto"> <!-- Sử dụng ms-auto để đẩy sang phải -->
                         <li class="nav-item">
-                            @if (ViewBag.IsLogin)
-                            {
-                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Đăng Xuất</a>
-                            }
-                            else
-                            {
-                                <a class="nav-link" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
-                            }
+                            <a a class="nav-link" asp-controller="Cart" asp-action="Index">
+                                <img src="https://cdn-icons-png.flaticon.com/128/3144/3144456.png" alt="Cart"
+                                    style="width: 20px; height: 20px;" />
+
+                            </a>
                         </li>
+                        <li class="nav-item"></li>
+                        @if (IsLogin)
+                        {
+                            <a class="nav-link" asp-controller="Account" asp-action="Logout">Đăng Xuất</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
+                        }
+                        </li>
+
                 </div>
         </nav>
     </header>
@@ -59,6 +72,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

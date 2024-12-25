@@ -1,20 +1,294 @@
 @model Models.ProductModel
+<div class="container-fluid py-5 mt-5">
+    <div class="container py-5">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-8 col-xl-9">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="border rounded">
+                            <a href="#">
+                                <img src="data:image/jpeg;base64,@Model.Image" class="img-fluid rounded" alt="Image">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4 class="fw-bold mb-3">@Model.Name </h4>
+                        <p class="mb-3">Danh mục: @Model.CategoryName</p>
+                        <h5 class="fw-bold mb-3">@Model.Price $</h5>
+                        <div class="d-flex mb-4">
+                            <i class="fa fa-star text-secondary"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <p class="mb-4">The generated Lorem Ipsum is therefore always free from repetition injected
+                            humour, or non-characteristic words etc.</p>
+                        <p class="mb-4">Susp endisse ultricies nisi vel quam suscipit. Sabertooth peacock flounder;
+                            chain pickerel hatchetfish, pencilfish snailfish</p>
+                        <form asp-controller="Cart" asp-action="add" method="post">
+                            <div class="input-group quantity mb-5" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" name="Quantity"
+                                    class="form-control form-control-sm text-center border-0" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                            <button type="submit"
+                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ hàng
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-lg-12">
+                        <nav>
+                            <div class="nav nav-tabs mb-3">
+                                <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
+                                    id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                    aria-controls="nav-about" aria-selected="true">Description</button>
+                                <button class="nav-link border-white border-bottom-0" type="button" role="tab"
+                                    id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
+                                    aria-controls="nav-mission" aria-selected="false">Reviews</button>
+                            </div>
+                        </nav>
+                        <div class="tab-content mb-5">
+                            <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                <p>The generated Lorem Ipsum is therefore always free from repetition injected humour,
+                                    or non-characteristic words etc.
+                                    Susp endisse ultricies nisi vel quam suscipit </p>
+                                <p>Sabertooth peacock flounder; chain pickerel hatchetfish, pencilfish snailfish
+                                    filefish Antarctic
+                                    icefish goldeye aholehole trumpetfish pilot fish airbreathing catfish, electric ray
+                                    sweeper.</p>
+                                <div class="px-2">
+                                    <div class="row g-4">
+                                        <div class="col-6">
+                                            <div
+                                                class="row bg-light align-items-center text-center justify-content-center py-2">
+                                                <div class="col-6">
+                                                    <p class="mb-0">Weight</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="mb-0">1 kg</p>
+                                                </div>
+                                            </div>
+                                            <div class="row text-center align-items-center justify-content-center py-2">
+                                                <div class="col-6">
+                                                    <p class="mb-0">Country of Origin</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="mb-0">Agro Farm</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="row bg-light text-center align-items-center justify-content-center py-2">
+                                                <div class="col-6">
+                                                    <p class="mb-0">Quality</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="mb-0">Organic</p>
+                                                </div>
+                                            </div>
+                                            <div class="row text-center align-items-center justify-content-center py-2">
+                                                <div class="col-6">
+                                                    <p class="mb-0">check</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="mb-0">Healthy</p>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="row bg-light text-center align-items-center justify-content-center py-2">
+                                                <div class="col-6">
+                                                    <p class="mb-0">Min Weight</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="mb-0">250 Kg</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
+                                @foreach (var item in Model.reviews)
+                                {
+                                    @* <div class="d-flex">
+                                        <img src="data:image/jpeg;base64,@item.User.ProfilePictureUrl"
+                                            class="img-fluid rounded-circle p-3" style="width: 100px; height: 100px;"
+                                            alt="">
+                                        <div class="">
+                                            <p class="mb-2" style="font-size: 14px;">@item.CreateDate</p>
+                                            <div class="d-flex justify-content-between">
+                                                <h5>@item.User.FullName</h5>
+                                                <div class="d-flex mb-3">
+                                                    <i class="fa fa-thumbs-up"></i>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <img src="data:image/jpeg;base64,@Model.Image" class="img-fluid" alt="@Model.Name" />
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star text-secondary"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <p>@item.Content </p>
+                                        </div>
+                                    </div> *@
+                                    <div class="d-flex align-items-start">
+                                        <!-- Phần hình ảnh và nội dung bên trái -->
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex">
+                                                <img src="data:image/jpeg;base64,@item.User.ProfilePictureUrl"
+                                                    class="img-fluid rounded-circle" style="width: 100px; height: 100px;"
+                                                    alt="User Profile Picture">
+                                                <div class="ms-3">
+                                                    <p class="mb-2 text-muted" style="font-size: 14px;">@item.CreateDate</p>
+                                                    <h5>@item.User.FullName</h5>
+                                                    <p>@item.Content</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Phần đánh giá bên phải -->
+                                        <div class="ms-auto d-flex flex-column align-items-center">
+                                            <form asp-action="like" asp-controller="Account" method="post">
+                                                <input type="hidden" name="id" value="@item.Id">
+                                                <input type="hidden" name="product_id" value="@Model.ProductId">
+                                                <button type="submit" class="btn-like">
+                                                    <i class="fa fa-thumbs-up like-icon" data-id="@item.Id"></i>
+                                                </button>
+                                                <span class="like-count" id="likeCount-@item.Id">@item.Like</span>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="tab-pane" id="nav-vision" role="tabpanel">
+                                <p class="text-dark">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor
+                                    sit. Aliqu diam
+                                    amet diam et eos labore. 3</p>
+                                <p class="mb-0">Diam dolor diam ipsum et tempor sit. Aliqu diam amet diam et eos labore.
+                                    Clita erat ipsum et lorem et sit</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="Review" asp-controller="Account" method="post">
+                        <h4 class="mb-5 fw-bold">Để lại đánh giá</h4>
+                        <div class="row g-4">
+                            @* <div class="col-lg-6">
+                                <div class="border-bottom rounded">
+                                    <input type="text" class="form-control border-0 me-4" placeholder="Yur Name *">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="border-bottom rounded">
+                                    <input type="email" class="form-control border-0" placeholder="Your Email *">
+                                </div>
+                            </div> *@
+                            <div class="col-lg-12">
+                                <input type="hidden" name="id" value="@Model.ProductId" />
+
+                                <div class="border-bottom rounded my-4">
+                                    <textarea name="content" id="content" class="form-control border-0" cols="30"
+                                        rows="8" placeholder="Đánh giá của bạn" spellcheck="false"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="d-flex justify-content-between py-3 mb-5">
+                                    <div class="d-flex align-items-center">
+
+                                    </div>
+                                    <button type="submit"
+                                        class="btn border border-secondary text-primary rounded-pill px-4 py-3">
+                                        Post Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xl-3">
+                <div class="row g-4 fruite">
+                    @await Component.InvokeAsync("Category")
+                </div>
+            </div>
+
+
         </div>
-        <div class="col-md-6">
-            <h2 class="text-center">@Model.Name</h1>
-                <h3>Price: @Math.Round(@Model.Price, 2)</h3>
-                <p><strong>Thể loại:</strong>@Model.CategoryName</p>
-                <p><strong>Stock:</strong> @Model.Stock</p>
+        <style>
+            .btn-like {
+                background: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+                cursor: pointer;
+            }
 
-        </div>
-    </div>
+            .like-icon {
+                font-size: 48px;
+                /* Phóng to biểu tượng like */
+                color: #efeff1;
+                transition: transform 0.3s ease;
+                cursor: pointer;
+            }
 
-    <p> @Model.Description</p>
-    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary">Back to Products</a>
+            .like-icon.liked {
+                color: #007bff;
+                /* Màu khi nhấn */
+            }
 
-</div>
+            .like-icon:hover {
+                transform: scale(1.2);
+                /* Tăng kích thước khi hover */
+            }
+
+            .like-count {
+                font-size: 18px;
+                color: #555;
+                margin-top: 5px;
+                /* Khoảng cách giữa biểu tượng và số lượt like */
+            }
+        </style>
+        <script>
+            @* let likeCount = 0; // Khởi tạo số like ban đầu là 0 *@
+
+                function toggleLikeColor(likeCount, Id) {
+                    var a = 'likeCount-' + Id;
+                    const likeCountElement = document.getElementById(a);
+                    const likeIcons = document.querySelectorAll('.like-icon');
+
+
+                    // Tìm biểu tượng like có id tương ứng
+                    let likeIcon = null;
+                    likeIcons.forEach(icon => {
+                        if (icon.getAttribute('data-id') === Id.toString()) {
+                            likeIcon = icon;
+                        }
+                    });
+
+
+                    // Kiểm tra nếu tìm thấy phần tử likeIcon tương ứng với Id
+                    if (likeIcon) {
+                        // Thay đổi màu sắc của biểu tượng like khi nhấn
+                        if ()
+                            likeIcon.classList.toggle('liked');
+
+                        // Nếu biểu tượng like đã được nhấn, tăng số like lên 1, ngược lại giảm 1
+                        if (likeIcon.classList.contains('liked')) {
+                            likeCount += 1;
+                        }
+                    }
+                    // Cập nhật số lượt like hiển thị trên giao diện
+                    likeCountElement.textContent = likeCount;
+                }
+
+
+        </script>

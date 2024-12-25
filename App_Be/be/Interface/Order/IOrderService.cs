@@ -5,7 +5,8 @@ namespace App.Interface
 {
     public interface IOrderService
     {
-        Task<OrderDto> Order(string id);
-        OrderDto GetOrderById(int id);
+        Task<OrderDto> Order(string id, List<int> ids);
+        Task<List<Order>> GetAll(string userId);
+        Task<Order> GetOrderById(int id);
     }
 }

@@ -1,4 +1,5 @@
 using App.DTO.Cart;
+using App.Models;
 namespace App.Interface
 {
     public interface ICartRepository

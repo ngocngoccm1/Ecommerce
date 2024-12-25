@@ -7,13 +7,14 @@ namespace App.Mappers
     {
         public static CartDto toCartDto(this List<CartItem> Lmodel)
         {
-            var Items = new List<CartItemDto>();
+            var Items = new List<CartItem>();
 
             foreach (var item in Lmodel)
             {
-                var i = new CartItemDto
+                var i = new CartItem
                 {
                     ProductId = item.ProductId,
+                    Product = item.Product,
                     Quantity = item.Quantity,
                 };
                 Items.Add(i);

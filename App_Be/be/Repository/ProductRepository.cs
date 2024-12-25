@@ -31,24 +31,44 @@ namespace App.ProductRepository
             await _context.SaveChangesAsync();
             return productModel;
         }
+        public async Task<List<Product>> GetAllProductAsync()
+        {
+            var products = await _context.Products.Include(p => p.Category).ToListAsync();
+
+            return products;
+        }
 
         public async Task<List<Product>> GetAllAsync(QueryObject query)
         {
             var products = _context.Products.Include(p => p.Category).AsQueryable();
-            if (!string.IsNullOrWhiteSpace(query.Category))
+            if (!string.IsNullOrWhiteSpace(query.CategoryId.ToString()))
             {
-                products = products.Where(s => s.Category.Name.Contains(query.Category));
+                products = products.Where(s => s.Category.CategoryId == query.CategoryId);
             }
             if (!string.IsNullOrWhiteSpace(query.Name))
             {
                 products = products.Where(s => s.Name.Contains(query.Name));
             }
-            return await products.ToListAsync();
+
+            if (query.Isdescending)
+            {
+                products = products.OrderByDescending(s => s.Price);
+            }
+            else if (!query.Isdescending)
+            {
+                products = products.OrderBy(s => s.Price);
+            }
+
+            var skipNumber = (query.PageNumber - 1) * query.PageSize;
+            return await products.Skip(skipNumber).Take(query.PageSize).ToListAsync();
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductId == id);
+            return await _context.Products
+                                .Include(p => p.Category)
+
+                                .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task<List<Product>> Import(IFormFile file)
@@ -120,9 +140,6 @@ namespace App.ProductRepository
             return existringProduct;
         }
 
-        public Task<List<Product>> Import(List<Product> products)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

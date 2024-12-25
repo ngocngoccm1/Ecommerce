@@ -16,10 +16,37 @@ namespace App.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("App.Models.Address", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Address");
+                });
 
             modelBuilder.Entity("App.Models.CartItem", b =>
                 {
@@ -185,6 +212,44 @@ namespace App.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("App.Models.Review", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Like")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Rep_reviewId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("user_liked")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("Rep_reviewId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Review");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -214,13 +279,13 @@ namespace App.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "affb717d-4a78-4bc2-8453-c311195e4d96",
+                            Id = "12b99a3d-e4c9-4537-be59-84b0546ddda6",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "1f5ef711-5e13-4b02-aa40-65d2458652b6",
+                            Id = "8d48a1fd-8980-4c5b-a673-b253ee6c86c6",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -340,6 +405,9 @@ namespace App.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AddressID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -351,11 +419,23 @@ namespace App.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("JoinedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("MoreInfor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -374,6 +454,9 @@ namespace App.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -385,6 +468,8 @@ namespace App.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -464,6 +549,27 @@ namespace App.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("App.Models.Review", b =>
+                {
+                    b.HasOne("App.Models.Product", null)
+                        .WithMany("reviews")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.Review", "Rep_review")
+                        .WithMany()
+                        .HasForeignKey("Rep_reviewId");
+
+                    b.HasOne("User", "User")
+                        .WithMany("Reivews")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Rep_review");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -515,6 +621,15 @@ namespace App.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("User", b =>
+                {
+                    b.HasOne("App.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressID");
+
+                    b.Navigation("Address");
+                });
+
             modelBuilder.Entity("App.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -527,11 +642,18 @@ namespace App.Migrations
                     b.Navigation("Payment");
                 });
 
+            modelBuilder.Entity("App.Models.Product", b =>
+                {
+                    b.Navigation("reviews");
+                });
+
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("CartItems");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Reivews");
                 });
 #pragma warning restore 612, 618
         }

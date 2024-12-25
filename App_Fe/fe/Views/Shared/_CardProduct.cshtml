@@ -1,17 +1,32 @@
 @model Models.ProductModel
 
-<div class="card h-100 w-200" style="overflow: hidden;">
-    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">
-        <img class="card-img-top" src="data:image/jpeg;base64,@Model.Image" alt="@Model.Name">
+@* <div class="card h-100 w-200" style="overflow: hidden;">
+<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">
+<img class="card-img-top" src="data:image/jpeg;base64,@Model.Image" alt="@Model.Name">
+</a>
+<div class="card-body">
+<p class="card-text">@Model.CategoryName</p>
+<h4 class="card-title">
+<h5>@Model.Name</h5>
+</h4>
+<h5>@Model.Price</h5>
+
+</div>
+<div class="card-footer">
+<small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+</div>
+</div> *@
+<div class="card">
+
+    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" style="text-decoration: none; ">
+
+        <img src="data:image/jpeg;base64,@Model.Image" class="card-img-top" alt="Ball Cactus">
+
+        <div class="card-body">
+
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">$@Model.Price</p>
+
+        </div>
     </a>
-    <div class="card-body">
-        <h4 class="card-title">
-            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Model.Name</a>
-        </h4>
-        <h5>@Model.Price</h5>
-        <p class="card-text">@Model.CategoryName</p>
-    </div>
-    <div class="card-footer">
-        <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-    </div>
 </div>

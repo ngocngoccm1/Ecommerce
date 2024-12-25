@@ -25,12 +25,19 @@ namespace App.Controllers
             var cart = await _cartService.GetCart(id);
             return Ok(cart);
         }
+        [HttpGet("id")]
+        public async Task<IActionResult> GetCart(string id)
+        {
+            // var id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
+            var cart = await _cartService.GetCart(id);
+            return Ok(cart);
+        }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddToCart([FromBody] CartItemDto cartItem)
+        public async Task<IActionResult> AddToCart([FromForm] CartItemDto cartItem)
         {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
-            await _cartService.AddToCart(cartItem, userId);
+            var id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
+            await _cartService.AddToCart(cartItem, id);
             return Ok("Đã thêm vào giỏ hàng");
         }
 

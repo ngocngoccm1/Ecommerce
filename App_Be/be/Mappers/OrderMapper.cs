@@ -19,6 +19,15 @@ namespace App.Mappers
                 OrderItems = Items
             };
         }
+        public static List<OrderDto> toOdersDTO(this List<Order> orders)
+        {
+            var Items = new List<OrderDto>();
+            foreach (var item in orders)
+            {
+                Items.Add(item.toOrderDto());
+            }
+            return Items;
+        }
         public static OrderItemDto toOrderItemDto(this OrderItem orderIM)
         {
             return new OrderItemDto

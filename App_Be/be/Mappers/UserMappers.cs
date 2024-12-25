@@ -13,7 +13,9 @@ namespace App.Mappers
                 Username = userModel.UserName,
                 Email = userModel.Email
             };
+
         }
+
 
     }
 }

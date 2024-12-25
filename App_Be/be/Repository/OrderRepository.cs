@@ -15,7 +15,7 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    public async Task<OrderDto> Create(string id)
+    public async Task<OrderDto> Create(string id, List<int> ids)
     {
 
 
@@ -24,23 +24,49 @@ public class OrderRepository : IOrderRepository
                         .Include(o => o.Product)
                         .ToList();
 
+        var collectioN = new List<CartItem>();
+        foreach (var i in ids)
+        {
+            foreach (var item in collection)
+            {
+                if (i == item.ProductId)
+                {
+                    collectioN.Add(item);
+                    _context.CartItems.Remove(item);
 
-        var newOrder = collection.CreateOrder(id);
-
-
+                }
+            }
+        }
+        var newOrder = collectioN.CreateOrder(id);
         await _context.Orders.AddAsync(newOrder);
         await _context.SaveChangesAsync();
 
         return newOrder.toOrderDto();
     }
 
-
-    public OrderDto GetById(int id)
+    public async Task<List<Order>> GetAll(string userId)
     {
-        var order = _context.Orders.Find(id);
-        if (order == null) return null;
+        var orders = await _context.Orders.Where(o => o.UserId == userId)
+                                    .Include(o => o.OrderItems)
 
-        return order.toOrderDto();
+                                    .ToListAsync();
+        if (orders != null)
+        {
+            return orders;
+        }
+        return new List<Order>();
+    }
+
+    public async Task<Order> GetById(int id)
+    {
+        var order = await _context.Orders
+                                .Include(o => o.OrderItems)
+                                    .ThenInclude(oi => oi.Product)
+                                .Include(o => o.Payment) // Include related OrderItems
+                                .FirstOrDefaultAsync(o => o.Id == id);
+        if (order == null) return new Order();
+
+        return order;
     }
 
 }

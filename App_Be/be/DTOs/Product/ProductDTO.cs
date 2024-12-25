@@ -1,4 +1,5 @@
 using App.DTO.Category;
+using App.Models;
 namespace App.DTO.Product
 {
 
@@ -11,6 +12,7 @@ namespace App.DTO.Product
         public int Stock { get; set; }
         public string Image { get; set; }
         public string CategoryName { get; set; }
+        public List<Review> Reviews { get; set; }
         public DateTime CreatedAt { get; set; }
 
     }

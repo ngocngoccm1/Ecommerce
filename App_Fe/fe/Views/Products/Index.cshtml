@@ -1,37 +1,212 @@
+@{
+
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = 5;
+    var active = 1;
+    if (currentPage > 3)
+    {
+        active = currentPage - 2;
+        totalPages += 1;
+    }
+
+}
 @model IEnumerable<Models.ProductModel>;
 
 <h1>@ViewBag.Message</h1>
 
-
 <div class="container">
-    <div class="row">
+    <div class="container-fluid fruite py-5">
+        <div class="container py-5">
+            <h1 class="mb-4">@ViewData["Category"]</h1>
+            <div class="row g-4">
+                <div class="col-lg-12">
+                    <div class="row g-4">
+                        <div class="col-xl-3">
+                            <div class="input-group w-100 mx-auto d-flex">
+                                <form method="get" action="@Url.Action("Index", "Products")" class="input-group">
+                                    <input type="search" name="Name" class="form-control p-3" placeholder="keywords"
+                                        aria-describedby="search-icon-1" />
+                                    <button type="submit" class="input-group-text p-3" id="search-icon-1">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </form>
 
-        <div class="col-lg-3">
+                            </div>
+                        </div>
+                        <div class="col-6"></div>
+                        <div class="col-xl-3">
+                            <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
+                                <label for="fruits">sắp xếp:</label>
 
-            <h1 class="my-4">Danh mục</h1>
-            <div class="list-group">
-                @foreach (var cate in ViewBag.Categories)
-                {
-                    <a asp-controller="Categories" asp-action="Details" asp-route-id="@cate.Value"
-                        class="list-group-item">@cate.Text</a>
-                }
-            </div>
+                                <form id="fruitform" method="get" action="@Url.Action("Index", "Products")">
+                                    <input type="hidden" name="PageNumber" value="@currentPage" />
+                                    <input type="hidden" name="CategoryId" value="@ViewBag.CurrentCateroryID" />
 
-        </div>
+                                    <select id="fruits" name="IsDescending"
+                                        class="border-0 form-select-sm bg-light me-3" onchange="this.form.submit()">
+                                        <option value="">Nothing</option>
+                                        <option value="false">Giá thấp</option>
+                                        <option value="true">Giá cao</option>
+                                    </select>
+                                </form>
 
-        <div class="col-lg-9">
-            <div class="row">
 
-                <h1 class="my-4">Danh sách sản phẩm </h1>
-                @foreach (var product in Model)
-                {
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <partial name="_CardProduct" model="product" />
+                            </div>
+                        </div>
                     </div>
-                }
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <div class="row g-4 mt-3">
+                                @await Component.InvokeAsync("Category")
+                                @* <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <h4 class="mb-2">Price</h4>
+                                        <input type="range" class="form-range w-100" id="rangeInput" name="rangeInput"
+                                            min="0" max="500" value="0" oninput="amount.value=rangeInput.value">
+                                        <output id="amount" name="amount" min-velue="0" max-value="500"
+                                            for="rangeInput">0</output>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <h4>Additional</h4>
+                                        <div class="mb-2">
+                                            <input type="radio" class="me-2" id="Categories-1" name="Categories-1"
+                                                value="Beverages">
+                                            <label for="Categories-1"> Organic</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="radio" class="me-2" id="Categories-2" name="Categories-1"
+                                                value="Beverages">
+                                            <label for="Categories-2"> Fresh</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="radio" class="me-2" id="Categories-3" name="Categories-1"
+                                                value="Beverages">
+                                            <label for="Categories-3"> Sales</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="radio" class="me-2" id="Categories-4" name="Categories-1"
+                                                value="Beverages">
+                                            <label for="Categories-4"> Discount</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <input type="radio" class="me-2" id="Categories-5" name="Categories-1"
+                                                value="Beverages">
+                                            <label for="Categories-5"> Expired</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <h4 class="mb-3">Featured products</h4>
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                            <img src="img/featur-1.jpg" class="img-fluid rounded" alt="">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-2">Big Banana</h6>
+                                            <div class="d-flex mb-2">
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="d-flex mb-2">
+                                                <h5 class="fw-bold me-2">2.99 $</h5>
+                                                <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                            <img src="img/featur-2.jpg" class="img-fluid rounded" alt="">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-2">Big Banana</h6>
+                                            <div class="d-flex mb-2">
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="d-flex mb-2">
+                                                <h5 class="fw-bold me-2">2.99 $</h5>
+                                                <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="rounded me-4" style="width: 100px; height: 100px;">
+                                            <img src="img/featur-3.jpg" class="img-fluid rounded" alt="">
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-2">Big Banana</h6>
+                                            <div class="d-flex mb-2">
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star text-secondary"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                            <div class="d-flex mb-2">
+                                                <h5 class="fw-bold me-2">2.99 $</h5>
+                                                <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center my-4">
+                                        <a href="#"
+                                            class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Vew
+                                            More</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="position-relative">
+                                        <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
+                                        <div class="position-absolute"
+                                            style="top: 50%; right: 10px; transform: translateY(-50%);">
+                                            <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
+                                        </div>
+                                    </div>
+                                </div> *@
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="row g-4 justify-content-center">
+                                @await Component.InvokeAsync("Product", Model)
+                                <div class="col-12">
+                                    <div class="pagination d-flex justify-content-center mt-5">
+                                        <a asp-controller="Products" asp-action="Index"
+                                            asp-route-CategoryId="@ViewBag.CurrentCateroryID"
+                                            asp-route-Isdescending="@ViewBag.Isdescending"
+                                            asp-route-PageNumber="@(currentPage - 1)"
+                                            class="rounded @(currentPage == 1 ? "disabled" : "")">&laquo; Quay lại</a>
 
-                <a class="btn-primary" asp-area="" asp-controller="Products" asp-action="create">Tạo sản phẩm</a>
+                                        @for (var i = active; i <= totalPages; i++)
+                                        {
+                                            <a asp-controller="Products" asp-action="Index"
+                                                asp-route-CategoryId="@ViewBag.CurrentCateroryID"
+                                                asp-route-Isdescending="@ViewBag.Isdescending" asp-route-PageNumber="@(i)"
+                                                class="@(currentPage == i ? "active rounded" : "rounded")">@i</a>
+                                        }
+
+
+
+                                        <a asp-controller="Products" asp-action="Index"
+                                            asp-route-CategoryId="@ViewBag.CurrentCateroryID"
+                                            asp-route-Isdescending="@ViewBag.Isdescending"
+                                            asp-route-PageNumber="@(currentPage + 1)"
+                                            class="rounded @(currentPage == totalPages ? "disabled" : "")">Tiến lên
+                                            &raquo;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
+</div>

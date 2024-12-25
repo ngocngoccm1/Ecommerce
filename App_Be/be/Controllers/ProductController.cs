@@ -12,6 +12,7 @@ using App.DTO.Product;
 using App.Interface;
 using App.Helpers;
 using OfficeOpenXml;
+using Microsoft.AspNetCore.Authorization;
 
 namespace App.Controllers
 {
@@ -20,10 +21,14 @@ namespace App.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepo;
+        private readonly IReviewRepository _review;
 
-        public ProductController(IProductRepository productRepo)
+
+        public ProductController(IProductRepository productRepo, IReviewRepository review)
         {
             _productRepo = productRepo;
+            _review = review;
+
         }
 
         // GET: api/Product
@@ -34,21 +39,37 @@ namespace App.Controllers
             var productsDto = products.Select(s => s.ToProductDto());
             return Ok(productsDto);
         }
+        [HttpGet]
+        [Route("getAll")]
+        public async Task<ActionResult<Product>> GetAllProduct()
+        {
+            var products = await _productRepo.GetAllProductAsync();
+            var productsDto = products.Select(s => s.ToProductDto());
+            return Ok(productsDto);
+        }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-
         public async Task<ActionResult<Product>> GetById(int id)
         {
             var product = await _productRepo.GetByIdAsync(id);
-
             if (product == null)
             {
                 return NotFound();
             }
-
-            return Ok(product.ToProductDto());
+            var reviews = await _review.GetAllProduct(id);
+            var productDto = product.ToProductDto(reviews);
+            return Ok(productDto);
         }
+
+        [HttpGet]
+        [Route("GetReview")]
+        public async Task<ActionResult<Review>> GetReview(string id)
+        {
+            var User_re = await _review.GetAll_UserAsync(id);
+            return Ok(User_re);
+        }
+
 
         // PUT: api/Product/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -64,6 +85,7 @@ namespace App.Controllers
         // POST: api/Product
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Create([FromForm] CreateProductRequest productDTO)
         {
 
@@ -73,11 +95,13 @@ namespace App.Controllers
             }
             var productModel = productDTO.ToFromCreateDOT();
             await _productRepo.CreateAsync(productModel);
-            var productDto = await _productRepo.GetByIdAsync(productModel.ProductId);
-            return CreatedAtAction(nameof(GetById), new { id = productModel.ProductId }, productModel.ToProductDto());
+            // var productDto = await _productRepo.GetByIdAsync(productModel.ProductId);
+            return Ok(productModel);
         }
         //---------Test
         [HttpPost("import")]
+        [Authorize]
+
         public async Task<IActionResult> ImportProducts(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -91,6 +115,7 @@ namespace App.Controllers
 
         // DELETE: api/Product/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepo.DeledeAsync(id);

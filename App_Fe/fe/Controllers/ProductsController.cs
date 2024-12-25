@@ -23,32 +23,42 @@ namespace App.Controllers
 
 
         }
-        public IActionResult Test()
+        public IActionResult Test(string jsonData)
         {
-            return View();
+            ZaloPayResponse content = JsonConvert.DeserializeObject<ZaloPayResponse>(jsonData) ?? new ZaloPayResponse();
+
+            return View("Content", content);
         }
 
-        public async Task<IActionResult> Index(string? name)
+        public async Task<IActionResult> Index(int CategoryId, string? Name, int PageNumber, bool Isdescending)
         {
-            if (IsLogin()) { ViewBag.IsLogin = true; }
-            else { ViewBag.IsLogin = false; }
-            var url = "api/Product";
-            if (!string.IsNullOrEmpty(name))
+            var url = "api/Product?";
+            ViewBag.CurrentPage = PageNumber == 0 ? 1 : PageNumber;
+            ViewBag.CurrentCateroryID = CategoryId == 0 ? 2 : CategoryId;
+
+
+            if (Name == null)
             {
-                url += $"?Name={name}";
+                if (Isdescending.ToString() != null)
+                {
+                    url += $"CategoryId={ViewBag.CurrentCateroryID}&Isdescending={Isdescending}&PageNumber={ViewBag.CurrentPage}";
+                }
+                else
+                {
+                    url += $"CategoryId={ViewBag.CurrentCateroryID}&PageNumber={ViewBag.CurrentPage}";
+                }
+            }
+            else
+            {
+                url += $"Name={Name}";
             }
             var response = await _httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();
-                var products = JsonConvert.DeserializeObject<List<ProductModel>>(jsonData);
-                var categories = await GetCategories(); // Phương thức để lấy danh sách danh mục
-                ViewBag.Categories = categories.Select(c => new SelectListItem
-                {
-                    Value = c.CategoryId.ToString(), // Giả sử Id là thuộc tính của CategoryModel
-                    Text = c.Name // Giả sử Name là thuộc tính của CategoryModel
-                }); // Truyền danh sách danh mục vào view
+                var products = JsonConvert.DeserializeObject<List<ProductModel>>(jsonData) ?? new List<ProductModel>();
+                // Phương thức để lấy danh sách danh mục
                 return View(products);
             }
 
@@ -58,7 +68,12 @@ namespace App.Controllers
         // Thêm vào ApiProductController
         public async Task<IActionResult> Create()
         {
-            ViewBag.IsLogin = true;
+            var token = HttpContext.Session.GetString("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Account"); // Redirect if token is not found
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var categories = await GetCategories(); // Phương thức để lấy danh sách danh mục
             ViewBag.Categories = categories.Select(c => new SelectListItem
             {
@@ -68,10 +83,28 @@ namespace App.Controllers
             return View();
         }
 
+        public async Task<ActionResult> Delete(int id)
+        {
+            string apiUrl = $"api/Product/{id}";
+            var token = HttpContext.Session.GetString("token");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _httpClient.DeleteAsync(apiUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Optionally log the error or show a more specific message.
+                return RedirectToAction("Admin", "Account"); // You could create a more descriptive error view
+            }
+
+            return RedirectToAction("Index"); // Redirect to Index after successful deletion
+        }
+
+
         public async Task<ActionResult> Details(int id)
         {
-            if (IsLogin()) { ViewBag.IsLogin = true; }
-            else { ViewBag.IsLogin = false; }
+
             string apiUrl = $"api/Product/{id}";
             try
             {
@@ -98,15 +131,21 @@ namespace App.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var token = HttpContext.Session.GetString("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Account", "Login"); // Redirect if token is not found
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             using (var content = new MultipartFormDataContent())
             {
                 // Thêm các thuộc tính vào nội dung
-                content.Add(new StringContent(productRequest.Name), "name");
-                content.Add(new StringContent(productRequest.Description), "description");
-                content.Add(new StringContent(productRequest.Price.ToString()), "price");
-                content.Add(new StringContent(productRequest.Stock.ToString()), "stock");
-                content.Add(new StringContent(productRequest.CategoryId.ToString()), "categoryId");
+                content.Add(new StringContent(productRequest.Name), "Name");
+                content.Add(new StringContent(productRequest.Description), "Description");
+                content.Add(new StringContent(productRequest.Price.ToString()), "Price");
+                content.Add(new StringContent(productRequest.Stock.ToString()), "Stock");
+                content.Add(new StringContent(productRequest.CategoryId.ToString()), "CategoryId");
 
                 // Thêm hình ảnh vào nội dung
                 if (productRequest.Image != null && productRequest.Image.Length > 0)
@@ -117,11 +156,11 @@ namespace App.Controllers
                 }
 
                 // Gửi yêu cầu POST đến API
-                var response = await _httpClient.PostAsync("http://localhost:5155/api/Product", content);
+                var response = await _httpClient.PostAsync("/api/Product", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Admin", "Acount");
                 }
 
                 return StatusCode((int)response.StatusCode, "Có lỗi xảy ra khi tạo sản phẩm.");
@@ -150,6 +189,49 @@ namespace App.Controllers
             // Check if the token exists in the session
             var token = HttpContext.Session.GetString("token");
             return !string.IsNullOrEmpty(token); // Return true if the token is not null or empty
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Import(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                ViewBag.Message = "Vui lòng chọn một file để upload.";
+                return RedirectToAction("Create", "Products");
+            }
+            var token = HttpContext.Session.GetString("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Account", "Login"); // Redirect if token is not found
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            using (var client = new HttpClient())
+            {
+                // client.BaseAddress = new Uri("http://localhost:5155"); // Đặt base URL của API
+
+                using (var content = new MultipartFormDataContent())
+                {
+                    var fileStreamContent = new StreamContent(file.OpenReadStream());
+                    fileStreamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                    content.Add(fileStreamContent, "file", file.FileName);
+
+                    var response = await _httpClient.PostAsync("/api/Product/import", content);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+                        ViewBag.Message = "Dữ liệu đã được import thành công!";
+                        ViewBag.Products = result; // Gửi dữ liệu sản phẩm về view
+                        return RedirectToAction("Admin", "Account");
+
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Lỗi khi import dữ liệu: " + response.ReasonPhrase;
+                    }
+                }
+            }
+            return RedirectToAction("Create", "Products");
+
         }
 
     }

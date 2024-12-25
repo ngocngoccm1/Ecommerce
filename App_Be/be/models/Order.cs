@@ -18,7 +18,7 @@ public class Order
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-    public virtual Payment Payment { get; set; }
+    public virtual Payment Payment { get; set; } = new Payment();
     [Column(TypeName = "decimal(18,2)")]
     public decimal TotalPrice { get; set; }
 

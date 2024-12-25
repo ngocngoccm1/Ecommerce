@@ -65,6 +65,7 @@ namespace App.Controllers
         // POST: api/Category
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Create([FromBody] CreateCategoryRequest categoryDTO)
         {
             var categoryModel = categoryDTO.ToFromCreateDOT();
@@ -73,6 +74,7 @@ namespace App.Controllers
             return CreatedAtAction(nameof(GetCategory), new { id = categoryModel.CategoryId }, categoryModel.ToCategoriDto());
         }
         [HttpPost("import")]
+        [Authorize]
         public async Task<IActionResult> Import(int id, IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -86,6 +88,7 @@ namespace App.Controllers
 
         // DELETE: api/Category/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryRepo.DeledeAsync(id);

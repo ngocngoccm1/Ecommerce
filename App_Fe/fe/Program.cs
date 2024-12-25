@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+
+
 builder.Services.AddHttpClient<AccountController>();
 builder.Services.AddHttpClient<ProductsController>();
 builder.Services.AddSession(options =>
@@ -37,6 +40,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession(); // Đừng quên thêm dòng này
 
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

@@ -8,8 +8,9 @@ namespace App.Mappers
 {
     public static class ProductMappers
     {
-        public static ProductDTO ToProductDto(this Product ProductModel)
+        public static ProductDTO ToProductDto(this Product ProductModel, List<Review> reviews = null)
         {
+            if (reviews == null) reviews = new List<Review>();
             return new ProductDTO
             {
                 ProductId = ProductModel.ProductId,
@@ -19,6 +20,7 @@ namespace App.Mappers
                 Stock = ProductModel.Stock,
                 Image = ProductModel.Image,
                 CategoryName = ProductModel.Category.Name,
+                Reviews = reviews,
                 CreatedAt = ProductModel.CreatedAt
             };
         }

@@ -19,6 +19,7 @@ public class CartRepository : ICartRepository
         // Lấy thông tin giỏ hàng từ cơ sở dữ liệu
         var collection = await _context.CartItems
                             .Where(o => o.UserId == id)
+                            .Include(o => o.Product)
                             .ToListAsync();
 
         var cartDto = collection.toCartDto();

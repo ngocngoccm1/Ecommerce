@@ -1,0 +1,89 @@
+@model IEnumerable<Models.ProductModel>
+
+<style>
+    .table {
+        table-layout: fixed;
+        /* Đặt cách thức bố trí bảng cố định */
+        width: 100%;
+        /* Chiều rộng bảng 100% */
+    }
+
+    .table th,
+    .table td {
+        overflow: hidden;
+        /* Ẩn nội dung vượt quá */
+        text-overflow: ellipsis;
+        /* Thêm dấu "..." cho nội dung bị cắt */
+        white-space: nowrap;
+        /* Không cho nội dung xuống dòng */
+        max-width: 150px;
+        /* Chiều rộng tối đa cho các ô */
+    }
+</style>
+
+<div class="mb-3">
+    <label for="categoryFilter" class="form-label">Lọc theo Danh mục:</label>
+    <select id="categoryFilter" class="form-select" onchange="filterProducts()">
+        <option value="">Tất cả Danh mục</option>
+        @foreach (var category in Model.GroupBy(p => p.CategoryName)) // Lấy danh sách danh mục duy nhất
+        {
+            <option value="@category.Key">@category.Key (@category.Count())</option>
+        }
+    </select>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Danh mục</th>
+                <th>Xóa</th>
+
+            </tr>
+        </thead>
+        <tbody id="productTableBody">
+            @foreach (var product in Model) // Giả sử bạn có danh sách sản phẩm trong Model
+            {
+                <tr data-category-name="@product.CategoryName">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="data:image/jpeg;base64,@product.Image" style="width: 80px; height: 80px;" alt="">
+                        </div>
+                    </td>
+                    <td>
+                        @product.Name</td>
+                    <td>@product.Price.ToString("C")</td> <!-- Định dạng giá -->
+                    <td>@product.Stock</td>
+                    <td>@product.CategoryName</td>
+
+                    <td>
+                        <a class="btn" style="color: #dc3545;" asp-controller="Products" asp-action="Delete"
+                            asp-route-id="@product.ProductId">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filterProducts() {
+        var select = document.getElementById("categoryFilter");
+        var selectedCategory = select.value;
+        var rows = document.querySelectorAll("#productTableBody tr");
+
+        rows.forEach(function (row) {
+            if (selectedCategory === "" || row.getAttribute("data-category-name") === selectedCategory) {
+                row.style.display = ""; // Hiện hàng
+            } else {
+                row.style.display = "none"; // Ẩn hàng
+            }
+        });
+    }
+</script>

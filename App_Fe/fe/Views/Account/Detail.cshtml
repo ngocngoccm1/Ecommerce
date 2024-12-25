@@ -1,0 +1,96 @@
+@model Models.UserModel
+@{
+    var user = Model; // Directly using the model passed to the view
+}
+
+<div class="container mt-5">
+    <div class="form-group">
+        <div>
+            @if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+            {
+                <img src="data:image/jpeg;base64,@user.ProfilePictureUrl" alt="@user.FullName" class="profile-pic mb-3" />
+            }
+            else
+            {
+                <p>Chưa có ảnh đại diện</p>
+            }
+        </div>
+    </div>
+    <h2 class="text-center mb-4">Thông tin người dùng</h2>
+
+    <div class="p-4 border rounded shadow">
+        <div class="row">
+            <div class="form-group">
+                <label for="fullName">Họ và tên:</label>
+                <p id="fullName" class="form-control-plaintext">@user.FullName</p>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="gender">Giới tính:</label>
+            <p id="gender" class="form-control-plaintext">@user.Gender</p>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <p id="email" class="form-control-plaintext">@user.Email</p>
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Số điện thoại:</label>
+            <p id="phoneNumber" class="form-control-plaintext">@user.PhoneNumber</p>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Đường:</label>
+            <p id="street" class="form-control-plaintext">@user.Address.Street</p>
+        </div>
+
+        <div class="form-group">
+            <label for="city">Thành phố:</label>
+            <p id="city" class="form-control-plaintext">@user.Address.City</p>
+        </div>
+
+        <div class="form-group">
+            <label for="state">Tỉnh:</label>
+            <p id="state" class="form-control-plaintext">@user.Address.State</p>
+        </div>
+
+        <div class="form-group">
+            <label for="zipCode">Mã bưu chính:</label>
+            <p id="zipCode" class="form-control-plaintext">@user.Address.ZipCode</p>
+        </div>
+
+    </div>
+
+    <a class="btn btn-danger " asp-controller="Account" asp-action="Edit">
+        <i class="fas fa-pencil fa-sm fa-fw mr-2 text-gray-300"></i>
+        Chỉnh sửa thông tin
+    </a>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .form-control-plaintext {
+        border: 1px solid #ced4da;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.25rem;
+        background-color: #e9ecef;
+    }
+
+    .profile-pic {
+        width: 100px;
+        /* Set width */
+        height: 100px;
+        /* Set height */
+        border-radius: 50%;
+        /* Make it circular */
+        object-fit: cover;
+        /* Ensure the image covers the area */
+        border: 2px solid #28a745;
+        /* Optional: Add a border */
+    }
+</style>

@@ -1,0 +1,11 @@
+@{
+    var url = ViewBag.Url;
+}
+<html>
+<a asp-controller="Products">Quay lại</i></a>
+
+</html>
+<script>
+    // Mở URL trong tab mới khi trang đã load
+    window.open('@url', '_blank');
+</script>

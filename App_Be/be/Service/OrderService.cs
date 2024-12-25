@@ -12,14 +12,18 @@ public class OrderService : IOrderService
         _orderRepository = orderRepository;
     }
 
-    public Task<OrderDto> Order(string id)
+    public Task<OrderDto> Order(string id, List<int> ids)
     {
-        return _orderRepository.Create(id);
+        return _orderRepository.Create(id, ids);
     }
 
-    public OrderDto GetOrderById(int id)
+    public async Task<Order> GetOrderById(int id)
     {
-        return _orderRepository.GetById(id);
+        return await _orderRepository.GetById(id);
     }
 
+    public async Task<List<Order>> GetAll(string userId)
+    {
+        return await _orderRepository.GetAll(userId);
+    }
 }

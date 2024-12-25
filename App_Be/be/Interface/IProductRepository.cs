@@ -7,6 +7,7 @@ namespace App.Interface
     public interface IProductRepository
     {
         Task<List<Product>> GetAllAsync(QueryObject query);
+        Task<List<Product>> GetAllProductAsync();
         Task<Product> GetByIdAsync(int id);
         Task<Product> CreateAsync(Product ProductModel);
         Task<List<Product>> Import(IFormFile file);

@@ -1,6 +1,7 @@
 
 using App.DTO.Cart;
 using App.Interface;
+using App.Models;
 
 public class CartService : ICartService
 {

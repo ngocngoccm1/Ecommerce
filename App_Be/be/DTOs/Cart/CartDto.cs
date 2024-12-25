@@ -4,7 +4,7 @@ namespace App.DTO.Cart
 {
     public class CartDto
     {
-        public List<CartItemDto> Items { get; set; } = new List<CartItemDto>();
+        public List<CartItem> Items { get; set; } = new List<CartItem>();
     }
 
 }

@@ -4,7 +4,9 @@ namespace App.Interface
 {
     public interface IOrderRepository
     {
-        Task<OrderDto> Create(string id);
-        OrderDto GetById(int id);
+        Task<OrderDto> Create(string id, List<int> ids);
+        Task<Order> GetById(int id);
+        Task<List<Order>> GetAll(string userId);
+
     }
 }

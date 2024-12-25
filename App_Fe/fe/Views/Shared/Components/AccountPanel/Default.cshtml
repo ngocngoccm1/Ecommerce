@@ -1,0 +1,68 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var token = HttpContextAccessor.HttpContext?.Session.GetString("token");
+    var token_admin = HttpContextAccessor.HttpContext?.Session.GetString("token_admin");
+
+}
+@if (string.IsNullOrEmpty(token))
+{
+    if (!string.IsNullOrEmpty(token_admin))
+    {
+        <li class="nav-item dropdown no-arrow show ">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="true">
+
+                <span class="mr-2 d-none d-lg-inline text-gray-800 small">XIN CHÀO!</span>
+                @* <img class="img-profile rounded-circle" src="data:image/jpeg;base64,@user.ProfilePictureUrl"> *@
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in show" aria-labelledby="userDropdown">
+
+                <a asp-controller="Account" asp-action="Admin" class="dropdown-item">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-300"></i>
+                    Admin
+                </a>
+            </div>
+        </li>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="login" class="my-auto">
+            <i class="fas fa-user fa-2x"></i>
+        </a>
+    }
+}
+else
+{
+    <li class="nav-item dropdown no-arrow show ">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+
+            <span class="mr-2 d-none d-lg-inline text-gray-800 small">XIN CHÀO!</span>
+            @* <img class="img-profile rounded-circle" src="data:image/jpeg;base64,@user.ProfilePictureUrl"> *@
+        </a>
+        <!-- Dropdown - User Information -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in show" aria-labelledby="userDropdown">
+
+            <a asp-controller="Account" asp-action="Detail" class="dropdown-item">
+
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-300"></i>
+                Trang cá nhân
+            </a>
+
+            <a class="dropdown-item" asp-controller="Order" asp-action="index">
+                <i class="fas fa-shopping-cart fa-sm fa-fw mr-2 text-gray-300"></i>
+                Các đơn đặt hàng
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a asp-controller="Account" asp-action="Logout" class="dropdown-item" data-toggle="modal"
+                data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                Đăng xuất
+            </a>
+        </div>
+    </li>
+
+}

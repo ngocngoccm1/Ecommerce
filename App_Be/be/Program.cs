@@ -9,6 +9,7 @@ using System.Security.Cryptography.Xml;
 using App.Service;
 using Microsoft.OpenApi.Models;
 using App.Models;
+using App.ReviewRepository;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -66,6 +67,12 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddSingleton<ZaloPayService>();
+
+builder.Services.AddHttpClient();
+
+
 // Thêm dịch vụ khóa token
 builder.Services.AddSwaggerGen(option =>
 {
@@ -97,6 +104,8 @@ builder.Services.AddSwaggerGen(option =>
 // Thêm các dịch vụ 
 // Category
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 // Cart
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
@@ -110,6 +119,12 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // token
 builder.Services.AddScoped<ITokenService, TokenService>();
+// add Address
+builder.Services.AddScoped<IAddressRepo, AddressRepo>();
+// send_mail
+// builder.Services.AddScoped<IGmailService, GmailService>();
+
+
 
 var app = builder.Build();
 

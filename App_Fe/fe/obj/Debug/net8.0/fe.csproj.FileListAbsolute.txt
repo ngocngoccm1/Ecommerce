@@ -83,3 +83,4 @@ D:\App\App_Fe\fe\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstr
 D:\App\App_Fe\fe\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 D:\App\App_Fe\fe\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\App\App_Fe\fe\bin\Debug\net8.0\Microsoft.JSInterop.dll
+D:\App\App_Fe\fe\obj\Debug\net8.0\scopedcss\Views\Shared\_CardProduct.cshtml.rz.scp.css

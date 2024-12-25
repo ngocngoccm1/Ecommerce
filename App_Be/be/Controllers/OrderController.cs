@@ -25,17 +25,25 @@ namespace App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Order()
+        public async Task<IActionResult> Order(List<int> ids)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
-            var order = await _orderService.Order(userId);
+            var order = await _orderService.Order(userId, ids);
             return Ok(order);
+        }
+        [HttpGet("ALL")]
+        public async Task<IActionResult> GetALl()
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value.ToString();
+            var orders = await _orderService.GetAll(userId);
+            if (orders == null) return NotFound();
+            return Ok(orders);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetOrderById(int id)
+        public async Task<IActionResult> GetOrderById(int id)
         {
-            var order = _orderService.GetOrderById(id);
+            var order = await _orderService.GetOrderById(id);
             if (order == null) return NotFound();
             return Ok(order);
         }

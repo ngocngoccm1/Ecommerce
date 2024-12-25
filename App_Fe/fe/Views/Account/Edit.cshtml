@@ -1,0 +1,85 @@
+@model UserUpdate
+@{
+    var user = ViewBag.user as Models.UserModel;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Cập nhật thông tin người dùng</h2>
+    <form asp-controller="Account" asp-action="Edit" method="post" enctype="multipart/form-data"
+        class="p-4 border rounded shadow">
+        <div class="form-group">
+            <label for="fullName">Họ và tên:</label>
+            <input type="text" class="form-control" id="fullName" name="FullName" value="@user?.FullName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Giới tính:</label>
+            <select class="form-control" id="gender" name="Gender">
+                <option value="Male">Nam</option>
+                <option value="Female">Nữ</option>
+                <option value="Other">Khác</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="Email" value="@user?.Email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">Số điện thoại:</label>
+            <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" value="@user?.PhoneNumber"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Đường:</label>
+            <input type="text" class="form-control" id="street" name="Street" value="@user?.Address.Street" required>
+        </div>
+
+        <div class="form-group">
+            <label for="city">Thành phố:</label>
+            <input type="text" class="form-control" id="city" name="City" value="@user?.Address.City" required>
+        </div>
+
+        <div class="form-group">
+            <label for="state">Tỉnh:</label>
+            <input type="text" class="form-control" id="state" name="State" value="@user?.Address.State" required>
+        </div>
+
+        <div class="form-group">
+            <label for="zipCode">Mã bưu chính:</label>
+            <input type="text" class="form-control" id="zipCode" name="ZipCode" value="@user?.Address.ZipCode" required>
+        </div>
+
+        <div class="form-group">
+            <label for="profilePictureUrl">Ảnh đại diện:</label>
+            <input type="file" class="form-control-file" id="profilePictureUrl" name="ProfilePictureUrl">
+        </div>
+
+        <div class="form-group">
+            <label for="moreInfo">Thông tin thêm:</label>
+            <textarea class="form-control" id="moreInfo" name="MoreInfor" rows="4" required>@user?.MoreInfo</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Thay đổi thông tin</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .form-control:focus {
+        border-color: #28a745;
+        /* Green focus border */
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        /* Green shadow */
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+</style>

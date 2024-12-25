@@ -24,6 +24,7 @@ public class Product
 
     [Required]
     public Category Category { get; set; }
+    public ICollection<Review> reviews { get; set; }
 
 }
 

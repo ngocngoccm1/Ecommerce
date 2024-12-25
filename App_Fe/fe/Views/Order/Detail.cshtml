@@ -1,0 +1,104 @@
+@model Models.OrderModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Đơn hàng chi tiết";
+    string content = $"Thanh toán cho đơn hàng {Model.Id}";
+    var OrderTransaction = HttpContextAccessor.HttpContext?.Session.GetString("OrderTransaction");
+    var OrderId = HttpContextAccessor.HttpContext?.Session.GetString("order_id");
+    var check = "chưa thanh toán";
+    if (OrderId == Model.Id.ToString())
+    {
+        check = " đã thanh toán";
+    }
+    decimal tong = 0;
+    foreach (var item in Model.OrderItems)
+    {
+        tong += (item.Price * item.Quantity);
+    }
+
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        @* <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button> *@
+    </div>
+}
+<h2>Đơn hàng chi tiết</h2>
+
+<div>
+    <h4>Mã ID của đơn hàng: @Model.Id</h4>
+    <h4>Trạng thái:@check</h4>
+    <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+    <p><strong>Tổng giá:</strong> @Model.TotalPrice.ToString("C")</p>
+</div>
+
+<h3>Đã đặt các sản phẩm:</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img src="data:image/jpeg;base64,@item?.Product?.Image" class="img-fluid me-5 rounded-circle"
+                            style="width: 80px; height: 80px;" alt="">
+                    </div>
+                </td>
+                <td>@item?.Product?.Name</td>
+                <td>@item?.Quantity</td>
+                <td>@item?.Price.ToString("C")</td>
+                <td>@(item?.Price * item?.Quantity)</td>
+                <!-- Tính tổng giá trị của sản phẩm trong đơn hàng -->
+            </tr>
+        }
+    </tbody>
+    <h5>Tổng cộng:@tong</h5>
+</table>
+
+<!-- Thêm một liên kết để quay lại danh sách đơn hàng -->
+
+<div style="display: flex; align-items: center; gap: 10px;">
+    <!-- Nút "quay lại" -->
+    <a href="@Url.Action("Index", "Order")" class="btn btn-secondary">Quay lại trang Order</a>
+
+    <!-- Form thanh toán -->
+    <form asp-controller="Account" asp-action="Payment" method="post" style="display: inline;">
+        @* Tạo số random từ 1 đến 1000 *@
+        @{
+            var random = new Random();
+            var randomNumber = random.Next(1, 1001);
+        }
+        <input type="hidden" name="paymentId" value="@(Model.Id + randomNumber)" />
+        <input type="hidden" name="orderId" value="@Model.Id" />
+        <input type="hidden" name="description" value="@content" />
+        <input type="hidden" name="amount" value="@((int)tong)" />
+
+        <!-- Nút thanh toán -->
+        <button type="submit" class="btn btn-primary">Thanh toán</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.close').forEach(button => {
+            button.addEventListener('click', event => {
+                const alert = button.closest('.alert');
+                if (alert) alert.remove(); // Xóa alert khỏi DOM
+            });
+        });
+    });
+
+</script>
